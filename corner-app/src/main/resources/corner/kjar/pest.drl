@@ -1,0 +1,19 @@
+package corner.kjar;
+
+import ftn.corner.model.*
+
+
+
+rule "Pest" 
+	salience ((100*$value) / $attributes.size())
+    when
+        $pest: Pest($diagnose: pest, $attributes: attributes)
+        $p: Plant($pestAttributes: pestAttributes)
+        Number($value: intValue >= 1) from accumulate(
+        	Diagnoses($t:this, this == this) from $pestAttributes,
+        	count($t)
+        )
+    then
+    	System.out.println("Pest: " + $pest);
+    	// modify($p) { addSymptoms($pest.pest) }
+end

@@ -1,0 +1,22 @@
+template header
+plantType
+minDays
+maxDays
+growStage
+
+import ftn.corner.model.*
+
+template "classification-rules"
+
+rule "Stage_@{row.rowNumber}"
+no-loop true
+when
+    $c: Plant(plantType == PlantTypes.@{plantType}, 
+    			daysOld >= @{minDays}, 
+    			daysOld <= @{maxDays})
+then
+    System.out.println("Stage changed");
+    modify ($c){ setGrowStage(GrowStages.@{growStage})};
+end
+
+end template

@@ -1,0 +1,12 @@
+package sbnz.integracija;
+
+import ftn.corner.model.User;
+
+
+rule "Classify Item - Low Range"
+    when
+        $i: User()
+    then
+        $i.setName("OP OP opa Radi drools");
+        update($i);
+end

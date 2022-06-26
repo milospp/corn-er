@@ -1,0 +1,12 @@
+package sbnz.integracija;
+
+import ftn.corner.model.User;
+
+
+rule "Drools test"
+    when
+        $i: User()
+    then
+        $i.setName("iiiIIIIIP2 Radi drools");
+        update($i);
+end
