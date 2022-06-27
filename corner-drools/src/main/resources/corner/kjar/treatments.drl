@@ -1,0 +1,60 @@
+package corner.kjar;
+
+import ftn.corner.model.*
+
+
+
+rule "Elateridae"
+	salience ((100*$value) / 3)
+    when
+        $p: Plant(currentDiagnose == null)
+        $symptoms: Symptoms()
+        Number($value: intValue >= 1) from accumulate(
+        	Symptoms($t: this,this == Symptoms.SHOT_HOLES || this == Symptoms.DEAD_PLANT || this == Symptoms.ROOT_DAMAGE ) from $symptoms,
+        	count($t)
+        )
+    then
+    	System.out.println("Elateridae: " + (100*$value) / 5);
+        modify($p) { setCurrentDiagnose(Diagnoses.ELATERIDAE) }
+
+end
+
+rule "Ostrinia Nubilalis"
+	salience ((100*$value) / 8)
+    when
+        $p: Plant(currentDiagnose == null)
+        $symptoms: Symptoms()
+        Number($value: intValue >= 3) from accumulate(
+        	Symptoms($t: this,this == Symptoms.SMALL_LAYED_EGG || this == Symptoms.WHITE_MASS_LEAFS || this == Symptoms.WHITE_MASS_STALK || this == Symptoms.EATEN_COB || this == Symptoms.HOLE_COB || this == Symptoms.CATERPILLAR || this == Symptoms.BUTTERFLY_LIKE || this == Symptoms.EATEN_LEAF ) from $symptoms,
+        	count($t)
+        )
+    then
+    	System.out.println("Ostrinia Nubilalis: " + (100*$value) / 5);
+        modify($p) { setCurrentDiagnose(Diagnoses.OSTRINIA_NUBILALIS) }
+
+end
+
+rule "Helicoverpa Armigera"
+	salience ((100*$value) / 4)
+    when
+        $p: Plant(currentDiagnose == null)
+        $symptoms: Symptoms()
+        Number($value: intValue >= 2) from accumulate(
+        	Symptoms($t: this,this == Symptoms.EATEN_COB || this == Symptoms.CATERPILLAR || this == Symptoms.BUTTERFLY_LIKE || this == Symptoms.EATEN_LEAF) from $symptoms,
+        	count($t)
+        )
+    then
+    	System.out.println("Helicoverpa Armigera: " + (100*$value) / 5);
+        modify($p) { setCurrentDiagnose(Diagnoses.HELICOVERPA_ARMIGERA) }
+
+end
+
+rule "Test"
+    when
+        $p: Plant(currentDiagnose == null)
+        $symptoms: Symptoms()
+    then
+    	System.out.println("Helicoverpa Armigera: ");
+        modify($p) { setCurrentDiagnose(Diagnoses.HELICOVERPA_ARMIGERA) }
+
+end
