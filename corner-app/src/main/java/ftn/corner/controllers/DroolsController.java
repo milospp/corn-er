@@ -1,10 +1,12 @@
 package ftn.corner.controllers;
 
-import ftn.corner.model.Plant;
+import ftn.corner.model.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 
 @RestController
 @AllArgsConstructor
@@ -17,4 +19,7 @@ public class DroolsController {
 //
 //        return new ResponseEntity<>(plant, HttpStatus.OK);
 //    }
+
+
+
 }

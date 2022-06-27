@@ -60,19 +60,34 @@ public class Plant {
 	@OneToMany(mappedBy = "plant", fetch = FetchType.EAGER)
 	private Set<DiagnoseHistory> diagnoseHistory = new HashSet<DiagnoseHistory>();
 
+	@OneToMany(mappedBy = "plant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<SoilMeasurement> soilMeasurements = new ArrayList<SoilMeasurement>();
 
 
 	public Set<PestAttribute> getPestAttributes() {
 		return pestAttributes;
 	}
 	private Diagnoses currentDiagnose;
+	private Diagnoses currentPestDiagnose;
+
+	@Transient
+	private Treatment suggest;
+
+	private Float currentPh;
 
 	@Transient
 	private int daysOld;
 
+	@Transient
+	private String description;
+
 
 	public void addTreatments(TreatmentHistory treatment) {
 		this.treatments.add(treatment);
+	}
+
+	public void addSoilMeasurements(SoilMeasurement soilMeasurement) {
+		this.soilMeasurements.add(soilMeasurement);
 	}
 
 	public void addSymptoms(Symptoms symptom) {

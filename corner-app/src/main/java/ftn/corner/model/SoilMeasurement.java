@@ -1,5 +1,6 @@
 package ftn.corner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class SoilMeasurement {
 
 
 	@ManyToOne
+	@JsonIgnore
 	private Plant plant;
 
 	private LocalDateTime datetime;

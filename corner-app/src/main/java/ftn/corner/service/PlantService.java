@@ -16,6 +16,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,9 +58,15 @@ public class PlantService extends CrudService<Plant> {
 
 //        Results results = kieHelper.verify();
         KieSession kieSession1 = kieHelper.build().newKieSession();
+
+        int sec = ChronoUnit.SECONDS.between(plant.getPlanted(), LocalDate.now());
+        plant.getPlanted().comp
+        plant.setDaysOld();
+
         kieSession1.insert(plant);
         kieSession1.fireAllRules();
         kieSession1.dispose();
+
 
 
         KieSession kieSession = kieContainer.newKieSession();
@@ -66,6 +74,7 @@ public class PlantService extends CrudService<Plant> {
 //        kieSession.insert(plantInputDTO.getPestAttributes());
 //        kieSession.insert(plantInputDTO.getSymptoms());
 
+        plant.setCurrentPh(plantInputDTO.getPh());
 
         plantInputDTO.getPestAttributes().stream().forEach(x -> {
             kieSession.insert(x);
@@ -74,6 +83,11 @@ public class PlantService extends CrudService<Plant> {
         plantInputDTO.getSymptoms().stream().forEach(x -> {
             kieSession.insert(x);
         });
+
+        plant.getSoilMeasurements().stream().forEach(x -> {
+            kieSession.insert(x);
+        });
+
         kieSession.fireAllRules();
         kieSession.dispose();
         return plant;

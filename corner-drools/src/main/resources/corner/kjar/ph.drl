@@ -4,18 +4,17 @@ import ftn.corner.model.*
 
 
 
-rule "Pest" 
-	salience ((100*$value) / $pestAttributes.size())
+rule "ph"
     when
-        $p: Plant(currentPestDiagnose == null)
-        $pestRule: PestRule($diagnose: pest, $pestAttributes: pestAttributes)
-        Number($value: intValue >= 3) from accumulate(
-        	PestAttribute($paatr: this, this memberOf $pestAttributes),
-        	count($paatr)
+        $p: Plant($ph: currentPh )
+        accumulate(
+        	SoilMeasurement($oldph : ph),
+        	$varph : variance($oldph)
         )
+        eval($varph > 0.5)
 
 
     then
-        System.out.println("Pest: " + $diagnose);
-    	modify($p) { setCurrentPestDiagnose($diagnose) }
+        System.out.println("VARIANSA : " + $varph);
+        modify($c) {setDescription("PH se promenio")}
 end

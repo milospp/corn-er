@@ -1,91 +1,62 @@
 package corner.kjar;
 
-import ftn.corner.model.User;
-import ftn.corner.model.Plant;
-import ftn.corner.model.PlantTypes;
-import ftn.corner.model.GrowStages;
-import ftn.corner.model.TreatmentHistory;
-import ftn.corner.model.Treatment;
-
-// rule "TestTest"
-//     when
-//         $i: User( name == "milos" )
-//     then
-//         $i.setName("IPPP Radi");
-//         $i.setLastname("Petrovic");
-//         update($i);
-// end
+import ftn.corner.model.*
+import ftn.corner.model.PestAttribute
+import java.util.ArrayList;
 
 
-
- 
-// rule "Corn stages 1"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld < 10)
-//     then
-//     	System.out.println("Pravilo jedaan");
-//     	modify($c) {setGrowStage(GrowStages.GERMINATION)}
-        
-// end
-
-// rule "Corn stages 2"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld >= 10, daysOld < 20)
-//     then
-//     	System.out.println("");
-//     	modify($c) {setGrowStage(GrowStages.LEAF_DEVELOPMENT)}
-        
-// end
-
-// rule "Corn stages 3"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld >= 20, daysOld < 30)
-//     then
-//     	System.out.println("");
-//     	modify($c) {setGrowStage(GrowStages.TILLERING)}
-        
-// end
-
-// rule "Corn stages 4"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld >= 30, daysOld < 40)
-//     then
-//     	System.out.println("");
-//     	modify($c) {setGrowStage(GrowStages.SHOOT_DEVELOPMENT)}
-        
-// end
-
-// rule "Corn stages 5"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld >= 40, daysOld < 50)
-//     then
-//     	System.out.println("");
-//     	modify($c) {setGrowStage(GrowStages.BOLTING)}
-        
-// end
-
-// rule "Corn stages 6"
-//     when
-//         $c: Plant(plantType == PlantTypes.CORN, daysOld >= 50, daysOld < 60)
-//     then
-//     	System.out.println("");
-//     	modify($c) {setGrowStage(GrowStages.INFLORESCENCE)}
-        
-// end
-
-
-
-rule "weed prevention 1"
+rule "startup"
     no-loop
+    salience 999999999
     when
-        $c: Plant(plantType == PlantTypes.CORN, growStage==GrowStages.GERMINATION)
+        $p: Object()
+        not (PestRule())
     then
-    	System.out.println("Add suggestion 2");
+    	System.out.println("STARTUP RULE");
 
-    	Treatment t = new Treatment(null, "Zastita od korova", "ZOK", "desc");
-    	TreatmentHistory th = new TreatmentHistory();
-    	th.setTreatment(t);
+        ArrayList<PestAttribute> pa = new ArrayList<PestAttribute>();
+        pa.add(PestAttribute.GRAY);
+        pa.add(PestAttribute.INCH1);
+        pa.add(PestAttribute.BUTTERFLY);
+        pa.add(PestAttribute.ANTENA);
+    	insert(new PestRule(Diagnoses.HELICOVERPA_ARMIGERA, pa));
 
-    	modify($c) {addTreatments(th)}
+
+        pa = new ArrayList<PestAttribute>();
+        pa.add(PestAttribute.GRAY);
+        pa.add(PestAttribute.INCH2);
+        pa.add(PestAttribute.WORM);
+        pa.add(PestAttribute.GOLD);
+    	insert(new PestRule(Diagnoses.OSTRINIA_NUBILALIS, pa));
+
+        pa = new ArrayList<PestAttribute>();
+        pa.add(PestAttribute.BLACK);
+        pa.add(PestAttribute.INCH1);
+        pa.add(PestAttribute.LEGS8);
+        pa.add(PestAttribute.ANTENA);
+    	insert(new PestRule(Diagnoses.ELATERIDAE, pa));
+
+
+        pa = new ArrayList<PestAttribute>();
+        pa.add(PestAttribute.BLACK);
+        pa.add(PestAttribute.GOLD);
+        pa.add(PestAttribute.INCH1);
+        pa.add(PestAttribute.LEGS6);
+        pa.add(PestAttribute.ANTENA);
+    	insert(new PestRule(Diagnoses.DIABROTICA_VIRGIFERA, pa));
+
+        pa = new ArrayList<PestAttribute>();
+        pa.add(PestAttribute.BLACK);
+        pa.add(PestAttribute.GOLD);
+        pa.add(PestAttribute.INCH2);
+        pa.add(PestAttribute.LEGS6);
+        pa.add(PestAttribute.ANTENA);
+    	insert(new PestRule(Diagnoses.DIABROTICA_VIRGIFERA_IMAGO, pa));
+
+
+        System.out.println("END OF STARTUP RULE");
+
+
+
 
 end

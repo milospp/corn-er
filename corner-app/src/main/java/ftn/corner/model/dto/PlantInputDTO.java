@@ -2,6 +2,7 @@ package ftn.corner.model.dto;
 
 import ftn.corner.model.Pest;
 import ftn.corner.model.PestAttribute;
+import ftn.corner.model.SoilMeasurement;
 import ftn.corner.model.Symptoms;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,6 @@ public class PlantInputDTO {
     private Long plantId;
     private Set<Symptoms> symptoms;
     private Set<PestAttribute> pestAttributes;
+    private Float ph;
+    private SoilMeasurement soilMeasurement;
 }

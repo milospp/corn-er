@@ -42,6 +42,21 @@
             </tr>
         </table>
 
+
+
+        <hr>
+        <h3>Istorija merenja zemljista</h3>
+        <table>
+            <tr>
+                <td>Merenja</td>
+            </tr>
+            <tr v-for="measurement in plant.soilMeasurements" :key="measurement.id">
+                <td>
+                    {{measurement.ph}}    --- {{measurement.datetime}}
+                </td>
+            </tr>
+        </table>
+
         <hr>
         
         <div class="d-flex">
@@ -74,18 +89,26 @@
                 <select name="" id="" v-model="pestAttributes" multiple>
                     <option value="WORM">Crv</option>
                     <option value="BUTTERFLY">Leptir</option>
+                    <option value="LEGS2">2 noge</option>
                     <option value="LEGS4">4 noge</option>
                     <option value="LEGS6">6 nogu</option>
                     <option value="LEGS8">8 nogu</option>
-                    <option value="ANTENA8">antene</option>
+                    <option value="ANTENA">antene</option>
                     <option value="BLACK">Crn</option>
                     <option value="GRAY">Sivi</option>
+                    <option value="GOLD">Zlatna boja</option>
                     <option value="DOTTED">Tačkice</option>
-                    <option value="INCH2">5cm</option>
-                    <option value="INCH4">7.5cm</option>
+                    <option value="INCH1">1cm</option>
+                    <option value="INCH2">2cm</option>
+                    <option value="INCH4">5cm</option>
                 </select>
 
                 <button class="green-btn pest-button">Rezonuj zivotinju</button>
+            </div>
+
+            <div class="ph-input">
+                <h2>Novo ph merenje</h2>
+                <input type="number" v-model=ph min="0" max="12" step="0.1" name="" id="">
             </div>
 
 
@@ -98,7 +121,8 @@
             <hr>
             <h3>Stadijum: {{plant.growStage}}</h3>
             <br />
-            <h3>Dijagnoza: {{plant.currentDiagnose}}</h3>
+            <h3 v-if="plant.currentDiagnose">Dijagnoza: {{plant.currentDiagnose}}</h3>
+            <h3 v-if="plant.currentPestDiagnose">Dijagnoza (Zivotinja): {{plant.currentPestDiagnose}}</h3>
             <br />
             <table>
                 <tr>
@@ -110,6 +134,8 @@
                     </td>
                 </tr>
             </table>
+
+            <h5>{{plant.description}}</h5>
         </div>
     </div>
 
@@ -126,7 +152,8 @@ export default {
             },
 
             pestAttributes: [],
-            sympthoms: []
+            sympthoms: [],
+            ph: 7
         }
     },
 
@@ -155,7 +182,8 @@ export default {
             let data = {
                 plantId: this.plant_id,
                 symptoms: this.sympthoms,
-                pestAttributes: this.pestAttributes
+                pestAttributes: this.pestAttributes,
+                ph: this.ph
             }
 
             let result = await axios.post(`http://localhost:8080/plants/${this.plant_id}/calculate`, data);

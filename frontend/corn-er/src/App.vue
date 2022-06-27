@@ -47,7 +47,7 @@ body {
 }
 
 
-input[type=text], input[type=password], input[type=date] {
+input[type=text], input[type=password], input[type=date], input[type=number] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
