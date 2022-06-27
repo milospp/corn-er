@@ -26,11 +26,6 @@
                     <th>Posejano dana: </th>
                     <td>{{plant.planted}}</td>
                 </tr>
-
-                <tr v-if="plant.growStage">
-                    <th>Stadijum: </th>
-                    <td>{{plant.growStage}}</td>
-                </tr>
             </table>
         </div>
 
@@ -53,7 +48,7 @@
 
             <div class="sympthoms-select">
                 <h2>Simptomi biljke</h2>
-                <select name="" id="" multiple>
+                <select name="" id="" v-model="sympthoms" multiple>
                     <option value="DRY_LEAFS">Suvo lisce</option>
                     <option value="GRAY_LEAF_SPOT">Sive pege</option>
                     <option value="COMMON_RUST">Budj</option>
@@ -76,7 +71,7 @@
 
             <div class="pest-select">
                 <h2>Prepoznata zivotinja</h2>
-                <select name="" id="" multiple>
+                <select name="" id="" v-model="pestAttributes" multiple>
                     <option value="WORM">Crv</option>
                     <option value="BUTTERFLY">Leptir</option>
                     <option value="LEGS4">4 noge</option>
@@ -85,7 +80,7 @@
                     <option value="ANTENA8">antene</option>
                     <option value="BLACK">Crn</option>
                     <option value="GRAY">Sivi</option>
-                    <option value="DOTTED">Cackeice</option>
+                    <option value="DOTTED">Tačkice</option>
                     <option value="INCH2">5cm</option>
                     <option value="INCH4">7.5cm</option>
                 </select>
@@ -96,7 +91,26 @@
 
         </div>
 
-        <button class="green-btn start-reasoning">Obradi simptome</button>
+        <button class="green-btn start-reasoning" @click="fireMainDrool">Obradi simptome</button>
+
+        <div>
+
+            <hr>
+            <h3>Stadijum: {{plant.growStage}}</h3>
+            <br />
+            <h3>Dijagnoza: {{plant.currentDiagnose}}</h3>
+            <br />
+            <table>
+                <tr>
+                    <th>Tretiranje</th>
+                </tr>
+                <tr v-for="treatment in plant.treatmentsSugestion" :key="treatment.id">
+                    <td>
+                        {{treatment}}
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
 
@@ -109,7 +123,10 @@ export default {
         return {
             plant: {
 
-            }
+            },
+
+            pestAttributes: [],
+            sympthoms: []
         }
     },
 
@@ -132,6 +149,18 @@ export default {
             let result = await axios.get("http://localhost:8080/plants/" + id);
             this.plant = result.data
             return result.data;        
+        },
+
+        async fireMainDrool(id) {
+            let data = {
+                plantId: this.plant_id,
+                symptoms: this.sympthoms,
+                pestAttributes: this.pestAttributes
+            }
+
+            let result = await axios.post(`http://localhost:8080/plants/${this.plant_id}/calculate`, data);
+            console.log(result);
+            this.plant = result.data;
         }
     },
 
@@ -141,6 +170,7 @@ export default {
 
     created() {
         this.loadPlant();
+        
     },
     beforeRouteUpdate(to, from, next) {
         // Call the API query method when the URL changes

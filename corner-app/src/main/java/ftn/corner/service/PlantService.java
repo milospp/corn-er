@@ -63,11 +63,20 @@ public class PlantService extends CrudService<Plant> {
 
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(plant);
-        kieSession.insert(plantInputDTO.getPestAttributes());
-        kieSession.insert(plantInputDTO.getSymptoms());
+//        kieSession.insert(plantInputDTO.getPestAttributes());
+//        kieSession.insert(plantInputDTO.getSymptoms());
+
+
+        plantInputDTO.getPestAttributes().stream().forEach(x -> {
+            kieSession.insert(x);
+        });
+
+        plantInputDTO.getSymptoms().stream().forEach(x -> {
+            kieSession.insert(x);
+        });
         kieSession.fireAllRules();
         kieSession.dispose();
-        return i;
+        return plant;
 
     }
 }
